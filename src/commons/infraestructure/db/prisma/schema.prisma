@@ -19,10 +19,10 @@ model User {
   refreshToken  String          @map(name: "refresh_token")
   createdAt     DateTime        @map(name: "created_at")
   updatedAt     DateTime?       @map(name: "updated_at")
-  SearchHistory SearchHistory[]
+  HistorySearch HistorySearch[]
 }
 
-model SearchHistory {
+model HistorySearch {
   id        Int       @id @default(autoincrement())
   uuid      String    @unique
   userId    Int       @map(name: "user_id")
