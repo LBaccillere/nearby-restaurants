@@ -22,6 +22,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.3.13",
+    "@nestjs/axios": "^0.0.7",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/jwt": "^8.0.0",

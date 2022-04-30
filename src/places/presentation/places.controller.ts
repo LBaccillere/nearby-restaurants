@@ -2,6 +2,7 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { PlacesService } from '../core/places.service';
+import { getPlacesDto } from './requests/getPlaces.dto';
 import { mapToResponse, PlacesResponse } from './responses/places.response';
 
 @Controller('places')
@@ -11,7 +12,7 @@ export class PlaceController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findNearbyPlaces(): Promise<PlacesResponse> {
-    return mapToResponse(await this.placesService.findNearbyPlaces());
+  async findNearbyPlaces(params: getPlacesDto): Promise<PlacesResponse> {
+    return mapToResponse(await this.placesService.findNearbyPlaces(params));
   }
 }
