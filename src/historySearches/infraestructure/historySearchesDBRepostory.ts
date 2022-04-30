@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UUID } from 'src/commons/types/uuid';
 import { HistorySearch } from '../core/historySearches.entity';
 import { HistorySearchesRepository } from '../core/historySearches.repository';
-import { PrismaService } from 'src/commons/infraestructure/db/prisma/prisma.service';
 import { User } from 'src/users/core/user.entity';
+import { PrismaService } from 'src/commons/infraestructure/db/prisma/prisma.service';
 
 @Injectable()
 export class HistorySearchesDBRepository implements HistorySearchesRepository {
@@ -49,6 +49,7 @@ export class HistorySearchesDBRepository implements HistorySearchesRepository {
         historySearchRecord.user.name,
         historySearchRecord.user.email,
         historySearchRecord.user.password,
+        historySearchRecord.user.token,
         historySearchRecord.user.refreshToken,
         historySearchRecord.user.createdAt,
         historySearchRecord.user.updatedAt,

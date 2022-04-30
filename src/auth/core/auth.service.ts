@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UUID } from 'src/commons/types/uuid';
 import { UsersService } from 'src/users/core/users.service';
-import { CreateUserDto } from 'src/users/presentation/requests/createUser.dto';
 import { EncryptService } from '../../commons/services/encrypt.service';
 import { JWTPayload } from '../jwtPayload';
 import { LoginDto } from '../presentation/requests/login.dto';
@@ -30,7 +30,9 @@ export class AuthService {
           loginDto.password,
         )
       ) {
-        return this.generateAccessToken(loginDto.email);
+        const { access_token } = await this.generateAccessToken(user.getUuid());
+        await this.usersService.updateToken(user.getUuid(), access_token);
+        return { access_token };
       }
       throw new UnauthorizedException();
     } catch (e) {
@@ -38,8 +40,12 @@ export class AuthService {
     }
   }
 
-  async registerUser(registerDto: RegisterDto): Promise<any> {
-    const userExists = await this.usersService.findByEmail(registerDto.email);
+  async register(registerDto: RegisterDto): Promise<any> {
+    let userExists;
+    try {
+      userExists = await this.usersService.findByEmail(registerDto.email);
+    } catch (e) {}
+
     if (userExists) {
       throw new HttpException(
         {
@@ -49,27 +55,25 @@ export class AuthService {
         HttpStatus.CONFLICT,
       );
     }
-    const createUserDto: CreateUserDto = {
+
+    const user = await this.usersService.create({
       name: registerDto.name,
       email: registerDto.email,
       password: registerDto.password,
-    };
-    const user = await this.usersService.create(createUserDto);
-    if (
-      user &&
-      this.encryptService.compareEncrypted(
-        user.getPassword(),
-        registerDto.password,
-      )
-    ) {
-      return this.generateAccessToken(registerDto.email);
-    }
-    return null;
+    });
+    const { access_token } = await this.generateAccessToken(user.getUuid());
+    await this.usersService.updateToken(user.getUuid(), access_token);
+
+    return { access_token };
   }
 
-  async generateAccessToken(email: string) {
-    const user = await this.usersService.findByEmail(email);
-    const payload: JWTPayload = { uuid: user.getUuid() };
+  async logout(uuid: UUID): Promise<any> {
+    await this.usersService.updateToken(uuid, null);
+    return { message: 'log out is ok' };
+  }
+
+  async generateAccessToken(uuid: UUID) {
+    const payload: JWTPayload = { uuid };
     return {
       access_token: this.jwtService.sign(payload),
     };

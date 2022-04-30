@@ -75,30 +75,4 @@ describe('Users', () => {
     const received = await userService.findByEmail(user.getEmail());
     expect(received.getEmail()).toBe(user.getEmail());
   });
-
-  it('update', async () => {
-    const email = 'email1';
-    const email2 = 'email2';
-    const user = await userService.create({
-      name: 'name1',
-      email,
-      password: 'password1',
-    });
-    const received = await userService.update(user.getUuid(), {
-      email: email2,
-    });
-    expect(received.getEmail()).toBe(email2);
-  });
-
-  it('remove', async () => {
-    const email = 'email1';
-    const user = await userService.create({
-      name: 'name1',
-      email,
-      password: 'password1',
-    });
-    await userService.remove(user.getUuid());
-    const received = await userService.findOne(user.getUuid());
-    expect(received).toBe(undefined);
-  });
 });

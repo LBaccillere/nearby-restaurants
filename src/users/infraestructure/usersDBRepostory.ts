@@ -16,6 +16,7 @@ export class UsersDBRepository implements UsersRepository {
         name: user.getName(),
         email: user.getEmail(),
         password: user.getPassword(),
+        token: user.getToken(),
         refreshToken: user.getRefreshToken(),
         createdAt: user.getCreatedAt(),
       },
@@ -55,25 +56,11 @@ export class UsersDBRepository implements UsersRepository {
     return this.#mapToModel(records[0]);
   }
 
-  async update(user: User): Promise<User> {
+  async updateToken(uuid: UUID, token: string): Promise<User> {
     const record = await this.prisma.user.update({
-      where: {
-        uuid: user.getUuid(),
-      },
+      where: { uuid },
       data: {
-        uuid: user.getUuid(),
-        name: user.getName(),
-        email: user.getEmail(),
-        password: user.getPassword(),
-      },
-    });
-    return this.#mapToModel(record);
-  }
-
-  async remove(uuid: UUID): Promise<User> {
-    const record = await this.prisma.user.delete({
-      where: {
-        uuid,
+        token,
       },
     });
     return this.#mapToModel(record);
@@ -85,6 +72,7 @@ export class UsersDBRepository implements UsersRepository {
       userRecord.name,
       userRecord.email,
       userRecord.password,
+      userRecord.token,
       userRecord.refreshToken,
       userRecord.createdAt,
       userRecord.updatedAt,

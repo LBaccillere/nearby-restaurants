@@ -6,6 +6,5 @@ export interface UsersRepository {
   findAll: () => Promise<User[]>;
   findByEmail: (email: string) => Promise<User>;
   findOne: (uuid: UUID) => Promise<User>;
-  update: (user: User) => Promise<User>;
-  remove: (uuid: UUID) => Promise<User>;
+  updateToken: (uuid: UUID, token: string) => Promise<User>;
 }

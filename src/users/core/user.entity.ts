@@ -5,6 +5,7 @@ export class User {
   #name: string;
   #email: string;
   #password: string;
+  #token: string;
   #refreshToken: string;
   #createdAt: Date;
   #updatedAt: Date;
@@ -14,6 +15,7 @@ export class User {
     name: string,
     email: string,
     password: string,
+    token: string,
     refreshToken: string,
     createdAt: Date,
     updatedAt: Date | null = null,
@@ -22,6 +24,7 @@ export class User {
     this.#name = name;
     this.#email = email;
     this.#password = password;
+    this.#token = token;
     this.#refreshToken = refreshToken;
     this.#createdAt = createdAt;
     this.#updatedAt = updatedAt;
@@ -35,7 +38,9 @@ export class User {
 
   getPassword = (): string => this.#password;
 
-  getRefreshToken = (): string => this.#refreshToken || '';
+  getToken = (): string => this.#token;
+
+  getRefreshToken = (): string => this.#refreshToken;
 
   getCreatedAt = (): Date => this.#createdAt;
 

@@ -1,7 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UUID } from 'src/commons/types/uuid';
 import { CreateUserDto } from '../presentation/requests/createUser.dto';
-import { UpdateUserDto } from '../presentation/requests/updateUser.dto';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UsersRepository } from './users.repository';
@@ -20,6 +19,7 @@ export class UsersService {
       createUserDto.name,
       createUserDto.email,
       await this.encryptService.encrypt(createUserDto.password),
+      null,
       null,
       new Date(),
     );
@@ -43,19 +43,8 @@ export class UsersService {
     return user;
   }
 
-  update(uuid: UUID, updateUserDto: UpdateUserDto): Promise<User> {
-    const user: User = new User(
-      uuid,
-      updateUserDto.name,
-      updateUserDto.email,
-      updateUserDto.password,
-      null,
-      new Date(),
-    );
-    return this.userRepository.update(user);
-  }
-
-  remove(uuid: UUID): Promise<User> {
-    return this.userRepository.remove(uuid);
+  updateToken(uuid: UUID, token: string): Promise<User> {
+    const user = this.userRepository.updateToken(uuid, token);
+    return user;
   }
 }

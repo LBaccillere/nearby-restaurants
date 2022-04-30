@@ -16,7 +16,8 @@ model User {
   name          String?
   email         String          @unique
   password      String
-  refreshToken  String          @map(name: "refresh_token")
+  token         String?         @map(name: "token")
+  refreshToken  String?         @map(name: "refresh_token")
   createdAt     DateTime        @map(name: "created_at")
   updatedAt     DateTime?       @map(name: "updated_at")
   HistorySearch HistorySearch[]

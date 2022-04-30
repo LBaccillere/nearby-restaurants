@@ -26,17 +26,8 @@ export class UsersFakeRepository implements UsersRepository {
     return user;
   }
 
-  async update(user: User): Promise<User> {
-    const record: User = this.#users.find(
-      (obj: User) => obj.getUuid() === user.getUuid(),
-    );
-    return Object.assign(record, user);
-  }
-
-  async remove(uuid: UUID): Promise<User> {
-    const record = this.#users.find((obj: User) => obj.getUuid() === uuid);
-    const position = this.#users.findIndex((user) => user.getUuid() === uuid);
-    this.#users.splice(position, 1);
-    return record;
+  async updateToken(uuid: UUID, token: string): Promise<User> {
+    const user: User = this.#users.find((user) => user.getUuid() === uuid);
+    return Object.assign(user, { token });
   }
 }
